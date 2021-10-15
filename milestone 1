@@ -1,0 +1,188 @@
+dna_string = 'AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC' #test string
+def dna2rna(dna):
+    rna = '' #creating rna as string
+    for symbol in dna:
+        if symbol not in 'AGCT': #causing error if string is invalid
+            rna = f'ERROR: input {symbol}, position {dna.index(symbol) + 1}, is not in AGCTU'
+            break
+        if symbol == 'T': #changing dna symbol to corresponding rna symbol
+            rna = rna + 'U'
+        elif symbol == 'C':
+            rna = rna + 'C'
+        elif symbol == 'T':
+            rna = rna + 'T'
+        elif symbol == 'G':
+           rna = rna + 'G'
+        else:
+            rna = rna + 'A'
+    return rna #returning new rna string
+
+
+def s(dna):
+    d = {'A':0, 'G':0,'C':0,'T':0} #creating dictionary with all values set to 0
+    for i in dna:
+        if i not in 'AGCT': #causing error if invalid input
+            print('invalid input')
+            break
+        d[i] += 1 #adding value depending on symbol
+    return d
+
+def reverse_complement(dna):
+    reverse = dna[::-1] # reversing dna string
+    rna = ''
+    for symbol in reverse:
+        if symbol == 'A': #changing dna symbol to corresponding rna symbol
+            rna = rna + 'T'
+        elif symbol == 'C':
+            rna = rna + 'G'
+        elif symbol == 'T':
+            rna = rna + 'A'
+        elif symbol == 'G':
+            rna = rna + 'C'
+    return rna
+  
+def mendels_law(hom, het, rec):
+    n = hom + het + rec # total number of pairings
+    AAAA = hom*(hom-1)/2 #number of times each pairing will occur based on amount
+    AAAa = hom*het
+    AaAa = het*(het-1)/2
+    Aaaa = het * rec
+    AAaa = hom * rec
+    aaaa = rec*(rec-1)/2
+    prob =( AAAA + AAAa + AAaa + AaAa*0.75 + Aaaa*0.5 + aaaa*0)/ (n*(n-1)/2) #probability of dominance based on known values for each type of pairing and number of times each pairing occurs
+    return prob #return probability
+
+def fibonacci_rabbits(n, k):
+    pop = 0
+    a1 = 0 # adults before creating pairs, babies growing up
+    b1 = 1 # initial babies population
+    a2 = 0 # initial adults
+    b2 = 0 # baby pairs created each month
+    if n == 1: #if only 1 month, amount of babies will be number of inital babies
+        pop = b1
+        return pop
+    for i in range (0,(n-1)):
+        a1 = a2 # number of adult pairs not including those growing up
+        b2 = a2 * k # amount of pairs created, adult pairs * fertilization rate
+        a2 = b1  + a1 # number of adult pairs, including those growing up
+        b1 = b2 # number of baby pairs for next loop equal to # pairs created
+        pop = a2 + b2 # population, adults plus babies
+    return pop
+
+def GC_content(dna_list):
+    perc = {}
+    for x in range (0,len(dna_list)): # creating empty dictionary 
+        perc[x] = 0
+    for i in range (0,len(dna_list)): # splitting by item
+        item = dna_list[i]
+        count_g = 0
+        count_c = 0    
+        for f in range (0,len(item)): # counting C/G in each item
+            if item[f] == 'G':
+                count_g += 1
+            if item[f] == 'C':
+                count_c += 1
+        count = count_g + count_c # total number of c / g
+        perc[i] = (count/(len(item))) * 100 # adding percent to dictionary, value is total c/g / total length of item times 100, key is index
+    keys, values = zip(*perc.items()) # making list of keys (index) and values (percent) from dictionary
+    sorted_percs_ascending = sorted(values) # sorting the probabilities in ascending order
+    highest = sorted_percs_ascending[-1] # taking the last value of sorted list, highest percent
+    highest_index = values.index(highest) # finding index for highest percent
+    return highest_index, highest
+
+def rna2codon(triplets):
+    triplets = triplets.upper() # making sure input is uppercase
+    #invalid = 'invalid'
+   # if len(triplets)%3 != 0: # if triplets wrong length, will return invalid
+    #    return invalid
+    #for i in triplets:
+     #   if i not in 'AGCU': # making sure input is valid- if not right letters, will return invalid
+      #      return invalid
+    genetic_code = {
+        'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',        'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
+        'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',        'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
+        'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',        'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+        'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',        'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+        'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',        'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+        'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',        'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+        'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',        'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+        'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',        'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
+    }
+    rna_codon = ''
+    for i in range (0,int(len(triplets)/3)): # setting up loop for each triplet
+        L = i*3
+        triplet = triplets[L:L+3] # splitting triplets into individual triplet
+        rna_codon += genetic_code.get(triplet,'Invalid') # getting corresponding codon
+        if '*' in rna_codon: # adding stop function, certain triplets should stop line
+            rna_codon = rna_codon[:-1]
+            break
+    return rna_codon
+
+def locate_substring(dna_snippet, dna):
+    positions = [] # initializng position list
+    for i in range(0,len(dna)): 
+        if dna[i:i+len(dna_snippet)] == dna_snippet: #if any segment of dna is same as snippet
+            positions.append(i) # add loop number, same as index, to positions list
+    return positions
+# test x = locate_substring("ATAT", "GATATATGCATATACTT")
+# test print(x)
+
+def hamming_dist(dna1, dna2):
+    count = 0 # initializing count of differences
+    for i in range (0,len(dna1)):
+        if dna1[i] != dna2[i]: # if letter in dna1 and dna2, at same index #, are not the same
+            count += 1 # it will add one to count
+    return count
+# test x = hamming_dist("GAGCCTACTAACGGGAT","CATCGTAATGACGGCCT")
+# test print(x)
+
+
+def count_dom_phenotype(genotypes):
+    invalid = 'Invalid'
+    dom = 0 # initializing values
+    if len(genotypes) != 6: # checking to see if input is valid
+        return invalid
+    dom += genotypes[0] * 2 # calculating number of offspring each pairing will have
+    dom += genotypes[1] * 2 # based on probability of dominant phenotype (1, 0.75, 0.5, or 0)
+    dom += genotypes[2] * 2 # and number of offspring each pairing will have (2)
+    dom += genotypes[3]*0.75 * 2
+    dom += genotypes[4]*0.5 * 2
+    dom += genotypes[5]*0 *2
+    return dom 
+
+
+
+def splice_rna(dna, intron_list):
+    count = 0 # this will count whether or not dna has an intron from the intron list
+    for i in range (0,len(intron_list)):
+        intron = intron_list[i]
+        for x in range (0,len(dna)):
+            if dna[x:x+len(intron)] == intron: # checking to see if has intron from intron list in dna
+                count = 1 # if there is intron, add 1 to count
+        if count == 1:
+            dna = dna.replace(intron, '') # replaces intron with empty space, removing it
+        count = 0 # setting count back to 0 for next loop
+    rna = dna2rna(dna) #converting remaining dna exons to rna
+    codon = rna2codon(rna) #converting  rna to codons
+    return codon
+# test f = splice_rna("ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG", ["ATCGGTCGAA", "ATCGGTCGAGCGTGT"])
+# test print (f == 'MVYIADKQHVASREAYGHMFKVCA')
+
+def source_rna(protein):
+    sources = 1 # initializing number of sources variable
+    genetic_code = {
+        'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',        'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
+        'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',        'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
+        'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',        'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+        'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',        'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+        'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',        'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+        'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',        'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+        'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',        'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+        'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',        'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G',
+    }
+    from collections import Counter
+    x = Counter(genetic_code.values()) # dictionary that has number of times each value occurs
+    for i in range (0,len(protein)):
+        sources =  sources * x.get(protein[i]) # multiplying each number by each other
+    return sources * 3 # times three to account for 3 possible stopping triplets
+
