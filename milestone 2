@@ -42,3 +42,18 @@ def shared_motif(dna_list):
 #test = shared_motif(["ATATACA", "ATACAGA", "GGTATACA"])
 #result = 'ATACA'
 #print(test == result)
+
+def perfect_match(rna):
+    A = rna.count('A') # counting the number of each symbol and assigning to corresponding variable
+    U = rna.count('U')
+    G = rna.count('G')
+    C = rna.count('C')
+    matches = 0 # initializing values
+    if A == U and G == C: #checking if a perfect match is possible from equal number of corresponding symbols
+        import math
+        matches = math.factorial(A) * math.factorial(C) # calculating number of mathces; combos of u and a times combos of c and g
+    else:
+        matches = 0 # if unequal number of corresponding variables, no perfect match possible
+    return matches
+#test = perfect_match("CACUAGUGCGAU")
+#print(test)
