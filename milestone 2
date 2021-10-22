@@ -58,3 +58,35 @@ def perfect_match(rna):
 #test = perfect_match("CACUAGUGCGAU")
 #result = 36
 #print(test == result)
+
+
+def reverse_complement(dna):
+    reverse = dna[::-1] # reversing dna string
+    rna = ''
+    for symbol in reverse:
+        if symbol == 'A': #changing dna symbol to corresponding rna symbol
+            rna = rna + 'T'
+        elif symbol == 'C':
+            rna = rna + 'G'
+        elif symbol == 'T':
+            rna = rna + 'A'
+        elif symbol == 'G':
+            rna = rna + 'C'
+    return rna
+def reverse_palindrome(dna):
+    tuples = []
+    m = 0
+    n = 1
+    for i in range (0, len(dna)**2): # stopping point at max
+        dna_string = dna[m:n] # creating string from dna in list with index m to n
+        if dna_string == reverse_complement(dna_string): # checking if string is reverse palindrome
+            if len(dna_string) > 3 and 12 > len(dna_string): # making sure length from 3 to 12
+                tuples.append((m,len(dna_string))) # adds new tuple to list
+        if n == len(dna): # once string is full length of dna,
+            m += 1 # move up first letter and start process over
+            n = m + 1
+        n += 1 # increasing length of string by one
+    return tuples
+#test = reverse_palindrome("AACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC")
+#result = [(8, 4), (25, 4)] 
+#print(test == result)
