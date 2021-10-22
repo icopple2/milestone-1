@@ -28,7 +28,7 @@ def shared_motif(dna_list):
     motif = '' # initializing values
     m = 0
     n = 1
-    for i in range (0,500): # this is just a big stopping point bc idk how to make it specific to list
+    for i in range (0,len(dna_list)*len(dna_list[0])): # stopping point at max
         dna_string = dna_list[0][m:n] # creating string from first item in list with index m to n
         if inall(dna_string, dna_list) == True: # checking if string is in all items
             if len(dna_string) > len(motif): # checking if new motif is bigger than current motif
