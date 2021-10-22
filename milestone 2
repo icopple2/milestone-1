@@ -1,0 +1,44 @@
+def find_splice(dna_motif, dna):
+    index = [] # beginnning list that will return later
+    m = 0 #what use to advance dna after finding motif
+    for i in range (0,len(dna)):
+        if dna[i] == dna_motif[m]:
+            index.append(i)
+            m += 1 # when find first index, check for second letter in rest of dna string
+        if len(index) == len(dna_motif): # once do all of dna_motif, stop
+            break
+    return index
+#test1 = find_splice("GTA", "ACGACATCACGTGACG")
+#result1 = [2, 6, 8]
+#print(test1 == result1)
+
+
+def inall(string, dlist): # use this funct. to see if dna_string is in all of the dnas in the list
+    check = 0
+    true = True
+    false = False
+    for i in range (0,len(dlist)):
+        if string in dlist[i]:
+            check += 1
+    if check == len(dlist):
+        return true
+    else: 
+        return false
+def shared_motif(dna_list):
+    motif = '' # initializing values
+    m = 0
+    n = 1
+    for i in range (0,500): # this is just a big stopping point bc idk how to make it specific to list
+        dna_string = dna_list[0][m:n] # creating string from first item in list with index m to n
+        if inall(dna_string, dna_list) == True: # checking if string is in all items
+            if len(dna_string) > len(motif): # checking if new motif is bigger than current motif
+                motif = dna_string # setting new motif equal to current string if bigger
+            if n < len(dna_list[0]): # checking that n isnt entire list
+                n += 1 # moving up index
+        elif inall(dna_string, dna_list) == False: # if string isnt in items,
+            m += 1 # first letter of string index moves up one
+            n = m + 1
+    return motif
+#test = shared_motif(["ATATACA", "ATACAGA", "GGTATACA"])
+#result = 'ATACA'
+#print(test == result)
