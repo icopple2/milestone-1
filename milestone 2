@@ -56,4 +56,5 @@ def perfect_match(rna):
         matches = 0 # if unequal number of corresponding variables, no perfect match possible
     return matches
 #test = perfect_match("CACUAGUGCGAU")
-#print(test)
+#result = 36
+#print(test == result)
