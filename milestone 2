@@ -110,3 +110,5 @@ def assemble_genome(dna_list):
 test = assemble_genome(["tupperware","areyouthere","error"])
 #print('tupperware'[-3:len('tupperware')])
 print(test)
+
+#test (icopple2)
