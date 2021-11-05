@@ -112,20 +112,20 @@ test = assemble_genome(["tupperware","areyouthere","error"])
 print(test)
 
 def random_genome(dna,gc_content):
-    import math
-    dna.upper()
-    result = []
-    L = len(dna)
-    k = 0
-    for i in dna:
+    import math # the BEST library
+    dna.upper() # string dna --> upper case
+    result = [] # start the function with an empty list - an empty bucket to put our outputs
+    L = len(dna) # length of string dna
+    k = 0 # a good starting place
+    for i in dna: # counts the numbers of (A's or T's) in string 'dna'
         if (i=="A") or (i=="T"):
             k+=1
-    def f_CG(x):
+    def f_CG(x): # pre-defined probability function implemented into python
         return x/2
-    def f_AT(x):
+    def f_AT(x): # pre-defined probability function implemented into python
         return (1-x)/2
     for v in gc_content:
-        P = f_AT(v)**k * f_CG(v)**(L-k)
-        logP = math.log(P,10)
-        result.append(logP)
-    return result
+        P = f_AT(v)**k * f_CG(v)**(L-k) # multiplies the probabilities of 'k' (A's or T's) and 'L-k' (G's or C's), based on the pre-defined probability functions; stores as variable 'P'
+        logP = math.log(P,10) # stores the log-base-10 of each value in list 'P'
+        result.append(logP) # for every entry in gc_content, we append the log-base-10 of the probability calculation to the empty string, essentially loading the empty bucket we defined earlier
+    return result # yee haw
